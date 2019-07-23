@@ -1,6 +1,7 @@
 # Implementar los metodos de la capa de negocio de socios.
 
 from practico_05.ejercicio_01 import Socio
+
 from practico_05.ejercicio_02 import DatosSocio
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -20,7 +21,7 @@ class NegocioSocio(object):
 
     MIN_CARACTERES = 3
     MAX_CARACTERES = 15
-    MAX_SOCIOS = 200
+    MAX_SOCIOS = 3
 
     def __init__(self):
         Base = declarative_base()
@@ -77,7 +78,6 @@ class NegocioSocio(object):
             self.session.delete(soc)
             self.session.commit()
             return True
-            return False
 
     def modificacion(self, socio):
         soc = self.session.query(Socio).filter(Socio.id == socio.id).first()
@@ -93,7 +93,7 @@ class NegocioSocio(object):
 
     def regla_1(self, socio):
         try:
-            socio_2 = datos.alta(Socio(dni=12345679, nombre='Carlos', apellido='Perez'))
+            socio_2 = self.datos.alta(Socio(dni=12345679, nombre='Carlos', apellido='Perez'))
             return False
         except Exception as e:
             raise DniRepetido('Dni Repetido')
@@ -110,12 +110,19 @@ class NegocioSocio(object):
             return False
 
 
-    def regla_3(self):
+    def regla_3(self,socio):
         """
         Validar que no se esta excediendo la cantidad maxima de socios.
         :raise: MaximoAlcanzado
         :return: bool
         """
-        self.MAX_SOCIOS
 
-        return False
+        try:
+            assert self.MAX_SOCIOS > len(self.todos())
+            exito = self.alta(socio)
+            return True
+        except:
+            raise MaximoAlcanzado('Se esta excediendo la cantidad maxima de socios')
+            return False
+
+    

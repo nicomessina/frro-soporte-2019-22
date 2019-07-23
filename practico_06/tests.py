@@ -1,9 +1,9 @@
 # Implementar los casos de prueba descriptos.
 
 import unittest
+import names
 from practico_05.ejercicio_01 import Socio
-from practico_06.capa_negocio import NegocioSocio, LongitudInvalida, DniRepetido
-
+from practico_06.capa_negocio import NegocioSocio, LongitudInvalida, DniRepetido, MaximoAlcanzado
 
 class TestsNegocio(unittest.TestCase):
 
@@ -16,6 +16,7 @@ class TestsNegocio(unittest.TestCase):
         self.ns.datos.borrar_todos()
 
     def test_alta(self):
+
         # pre-condiciones: no hay socios registrados
         self.assertEqual(len(self.ns.todos()), 0)
 
@@ -54,23 +55,39 @@ class TestsNegocio(unittest.TestCase):
 
     def test_regla_2_apellido_mayor_15(self):
         invalido = Socio(dni=12345678, nombre='Juan', apellido='Gonzalez Gonzalez')
-        self.assertRaises(LongitudInvalida, self.ns.regla_2, invalido)
+        self.assertRaises(LongitudInvalida, self.ns.regla_2,invalido)
 
 
     def test_regla_3(self):
-        pass
+        for i in range(self.ns.MAX_SOCIOS):
+            exito=self.ns.alta(self.ns.datos.generarSocio())
+        socio = self.ns.datos.generarSocio()
+        self.assertRaises(MaximoAlcanzado,self.ns.regla_3,socio)
+
+
 
     def test_baja(self):
-        pass
+        socio = self.ns.alta(self.ns.datos.generarSocio())
+        self.assertTrue(self.ns.baja(socio.id))
 
     def test_buscar(self):
-        pass
+        socio = self.ns.alta(self.ns.datos.generarSocio())
+        self.assertIsNotNone(self.ns.buscar(socio.id))
 
     def test_buscar_dni(self):
-        pass
+        socio = self.ns.alta(self.ns.datos.generarSocio())
+        self.assertIsNotNone(self.ns.buscar_dni(socio.dni))
 
     def test_todos(self):
-        pass
+        socio = self.ns.alta(self.ns.datos.generarSocio())
+        self.ns.todos()
+        self.assertNotEqual(self.ns.todos(),[])
 
     def test_modificacion(self):
-        pass
+        #Socio que se crea
+        socio_1 = self.ns.alta(self.ns.datos.generarSocio())
+        cambios = self.ns.datos.generarSocio()
+        socio_1.nombre = cambios.nombre
+        socio_1.apellido = cambios.apellido
+        socio_1.dni = cambios.dni
+        self.assertTrue(self.ns.modificacion(socio_1))

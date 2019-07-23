@@ -3,6 +3,8 @@
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import random
+import names
 from practico_05.ejercicio_01 import Base, Socio
 #from ejercicio_01 import Base, Socio
 
@@ -89,6 +91,16 @@ class DatosSocio(object):
             self.session.commit()
             return True
 
+    def generar_dni(self):
+        dni = random.randint(37000000, 80000000)
+        return dni
+
+    def generarSocio(self):
+        dni = self.generar_dni()
+        nombre = names.get_first_name()
+        apellido = names.get_full_name()
+        socio = Socio(dni=dni, nombre=nombre, apellido=apellido)
+        return socio
 
 def pruebas():
     # alta
