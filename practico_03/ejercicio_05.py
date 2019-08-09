@@ -26,7 +26,7 @@ def actualizar_persona(id_persona, nombre, nacimiento, dni, altura):
     else:
 
         return fila
-
+    db.close()
 
 
 

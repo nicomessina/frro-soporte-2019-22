@@ -35,6 +35,7 @@ def listar_pesos(id_persona):
         cSQL = 'SELECT fecha_pesaje, peso FROM persona_peso WHERE id_persona = ?'
         cursor.execute(cSQL, (id_persona,))
         pesajes = cursor.fetchall()
+        print(pesajes)
         return pesajes
 
 

@@ -20,12 +20,14 @@ def numeros_al_final(lista):
             print('lista actualizada: ',lista)
     print(lista)'''
     for valor in range(len(lista)):
-        print('\nvalor: ',valor)
-        print('value en index:',lista[valor])
+        print('\nvalor: ',lista[valor])
+        print('value en index:',valor)
         if(lista[valor].isdigit()==True):
             lista.append(lista[valor])
             del lista[valor]
+            print(valor)
             valor-=1
+            print('\n',valor)
     print(lista)
 
 
