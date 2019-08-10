@@ -35,18 +35,22 @@ class NegocioSocio(object):
 
     
     def alta(self, socio):
+        print('Se crea un socio')
         if self.regla_1(socio):
             if self.regla_2(socio):
-                if self.regla_3(socio):
-                    self.datos.alta(socio)
-                    return True
+                if self.regla_3():
+                    print(socio)
+                    soc = self.datos.alta(socio)
+                    print(soc.nombre)
+                    return soc
         return False
        
        #     return True
         #else return False
 
     def baja(self, id_socio):
-        self.datos.baja(id_socio)
+
+        return self.datos.baja(id_socio)
 
     def modificacion(self, socio):
         if self.regla_2(socio):
@@ -87,7 +91,8 @@ class NegocioSocio(object):
         :raise: MaximoAlcanzado
         :return: bool
         """
-        if len(self.datos.todos()) >= MAX_SOCIOS:
+
+        if len(self.datos.todos()) >= self.MAX_SOCIOS:
             raise MaximoAlcanzado('Se ha alcanzado el maximo de socios permitidos')
             return False
         else:

@@ -4,8 +4,8 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# from practico_05.ejercicio_01 import Base, Socio
-from ejercicio_01 import Base, Socio
+from practico_05.ejercicio_01 import Base, Socio
+#from ejercicio_01 import Base, Socio
 #
 
 class DatosSocio(object):
@@ -74,11 +74,9 @@ class DatosSocio(object):
         if soc == None:
             return False
         else:
-       # session.delete(lp.id_persona)
             self.session.delete(soc)
             self.session.commit()
             return True
-            return False
 
     def modificacion(self, socio):
         soc = self.session.query(Socio).filter(Socio.id == socio.id).first()
