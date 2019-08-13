@@ -35,13 +35,10 @@ class NegocioSocio(object):
 
     
     def alta(self, socio):
-        print('Se crea un socio')
         if self.regla_1(socio):
             if self.regla_2(socio):
                 if self.regla_3():
-                    print(socio)
                     soc = self.datos.alta(socio)
-                    print(soc.nombre)
                     return soc
         return False
        

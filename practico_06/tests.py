@@ -56,7 +56,7 @@ class TestsNegocio(unittest.TestCase):
         self.assertTrue(self.ns.regla_2(valido))
 
         #Nombre mayor a 15 caracteres
-        invalido = Socio(dni=12345678, nombre='Francisco javier', apellido='Perez'
+        invalido = Socio(dni=12345678, nombre='Francisco javier', apellido='Perez')
         self.assertRaises(LongitudInvalida, self.ns.regla_2, invalido)
 
     def test_regla_2_apellido_menor_3(self):
