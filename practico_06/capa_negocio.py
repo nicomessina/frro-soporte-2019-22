@@ -77,7 +77,6 @@ class NegocioSocio(object):
             self.session.delete(soc)
             self.session.commit()
             return True
-            return False
 
     def modificacion(self, socio):
         soc = self.session.query(Socio).filter(Socio.id == socio.id).first()
