@@ -45,7 +45,7 @@ class DatosSocio(object):
         try:
             lista = self.session.query(Socio).all()
             for s in lista:
-                list.append((s.dni,s.nombre,s.apellido))
+                list.append((s.id, s.dni,s.nombre,s.apellido))
 
             return list
         except:

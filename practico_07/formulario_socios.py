@@ -49,20 +49,18 @@ class Application(ttk.Frame):
         self.btnAlta = ttk.Button(text="Alta",command=lambda: self.nueva_ventana(ventana,'Alta'))
         self.btnAlta.grid(column=0,row=1)
         #Baja no tiene ventana nueva
-        self.btnBaja = ttk.Button(text="Baja",command=lambda: self.borrar_socio(ventana))
+        self.btnBaja = ttk.Button(text="Baja",command=lambda: self.fila_seleccionada(ventana,'Baja'))
         self.btnBaja.grid(column=1,row=1)
-        self.btnModificar = ttk.Button(text="Modificar",command=lambda: self.modificar_socio(ventana))
+        self.btnModificar = ttk.Button(text="Modificar",command=lambda: self.fila_seleccionada(ventana,'Modificacion'))
         self.btnModificar.grid(column=2,row=1)
 
     def cargar_socios(self):
+        self.tree.delete(*self.tree.get_children())
         for record in self.ns.todos():
             self.tree.insert('', 'end', values=record)
 
 
-    
-
-    
-    def nueva_ventana(self,ventana, tipo):
+    def nueva_ventana(self,ventana, tipo, dni_anterior = False):
         titulo= tipo + ' de Socio'
         nueva_ventana = tk.Toplevel(ventana)
         nueva_ventana.geometry("300x150")
@@ -90,67 +88,73 @@ class Application(ttk.Frame):
         else:
             text = 'Aceptar'
 
-        self.btn_aceptar_guardar = Button(nueva_ventana, text = text,command = lambda: self.aceptar_guardar(nueva_ventana,tipo)).grid(row = 4, column = 2, sticky = W)
-        #self.btn_car = Button(nueva_ventana, text = text,command=nueva_ventana.destroy).grid(row = 4, column = 2, sticky = W)
-
+        self.btn_aceptar_guardar = Button(nueva_ventana, text = text,command = lambda: self.aceptar_guardar(nueva_ventana,tipo,dni_anterior)).grid(row = 4, column = 2, sticky = W)
         self.btn_cancelar = Button(nueva_ventana,text="Cancelar",command=nueva_ventana.destroy).grid(row = 5, column = 2, sticky = W)
 
-    def aceptar_guardar(self, ventana,tipo):
+    def aceptar_guardar(self, ventana,tipo, dni_anterior):
+        dni = self.dni.get()
+        nombre = self.nombre.get()
+        apellido = self.apellido.get()
         if tipo=='Alta':
-            self.alta_socio(ventana,self.nombre.get(),self.apellido.get(),self.dni.get())
+            self.alta_socio(ventana, dni, nombre, apellido)
         else:
-            self.modificar_socio(ventana)
 
-    def alta_socio(self, ventana, dni, nombre, apellido):
+            print(dni_anterior)
+            self.modificar_socio(ventana, dni, nombre, apellido,dni_anterior)
+
+    def hay_campos_vacios(self, dni, nombre, apellido):
         if nombre == "" or apellido == "" or dni == 0:
             showerror("Error", "Hay campos sin completar")
+            return True
         else:
+            return False
+
+    def alta_socio(self, ventana, dni, nombre, apellido):
+        if not self.hay_campos_vacios(dni, nombre, apellido):
             socio = Socio(nombre=nombre, apellido=apellido, dni=dni)
             alta = self.ns.alta(socio)
-
             if alta:
                 self.cargar_socios()
-                # self.cargar_datos()
-                # self.grid()
                 ventana.destroy()
             else:
-                showerror("Error", alta)
+                showerror("Error", 'Hay ocurrido un error')
+
+    def modificar_socio(self, ventana , dni, nombre, apellido,dni_anterior):
+        if not self.hay_campos_vacios(dni, nombre, apellido):
+            print(dni_anterior)
+            socio_id = self.ns.buscar_dni(dni_anterior).id
+            socio = Socio(id=socio_id, dni=dni, nombre=nombre, apellido=apellido)
+            modificacion = self.ns.modificacion(socio)
+            print(socio)
+            print(modificacion)
+            if modificacion:
+                self.cargar_socios()
+                ventana.destroy()
+            else:
+                showerror("Error", 'Hay ocurrido un error')
 
     def fila_seleccionada(self, ventana, tipo):
         seleccion = self.tree.focus()
         if seleccion:
             fila = self.tree.selection()[0]
             datos = self.tree.item(fila)
-            id = datos['text']
-            nombre = datos['values'][0]
-            apellido = datos['values'][1]
-            dni = datos['values'][2]
-            self.txt_nombre.insert(1, nombre)
+            id = datos['values'][0]
             if tipo=='Modificacion':
-                self.nueva_ventana(ventana, 'Modificación')
+                dni_anterior = datos['values'][1]
+                self.nueva_ventana(ventana, 'Modificación', dni_anterior)
+                self.dni.set(datos['values'][1])
+                self.apellido.set(datos['values'][2])
+                self.nombre.set(datos['values'][3])
+
             # Lista con los datos del item seleccionado
             else:
-                self.ns.baja(id)
-
+                print('se eligio baja', id)
+                res = self.ns.baja(id)
+                print(res)
+            self.cargar_socios()
 
         else:
             showerror("Error","Debe seleccionar un socio")
-
-# class Ventana_modificacion(ttk.Frame):
-#     def __init__(self, ventana):
-#         super().__init__(ventana)
-#         self.modificacion_vent = Toplevel()
-#         self.modificacion_vent.title = 'Modificación de Socio'
-#         Label(self.modificacion_vent, text = 'Nuevo Dni:').grid(row = 1, column = 1)
-#         nuevo_dni = Entry(self.modificacion_vent)
-#         nuevo_dni.grid(row = 1, column = 2)
-#         Label(self.modificacion_vent, text = 'Nuevo Nombre:').grid(row = 2, column = 1)
-#         nuevo_nombre= Entry(self.modificacion_vent)
-#         nuevo_nombre.grid(row = 2, column = 2)
-#         Label(self.modificacion_vent, text = 'Nuevo Apellido:').grid(row = 3, column = 1)
-#         nuevo_apellido= Entry(self.modificacion_vent)
-#         nuevo_apellido.grid(row = 3, column = 2)
-#         Button(self.modificacion_vent, text = 'Actualizar', command = lambda: self.realizar_modificacion(id, nuevo_dni.get(), nuevo_nombre.get(), nuevo_apellido.get())).grid(row = 4, column = 2, sticky = W)
 
 def main():
     ventana = tk.Tk()
@@ -160,18 +164,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
-
-# def agregar_ciudad(self):
-    # """
-    # Insertion method.
-    # """
-    # self.tree.insert('', 'end',values=(self.valor_1_txt.get(), self.valor_2_txt.get()))
-    # # Increment counter
-    # self.valor_1_txt.delete(0,END)            
-    # self.valor_2_txt.delete(0,END)
-    
-# def borrar_ciudad(self):
-    # self.tree.delete(self.fila)
-    # self.valor_1_txt.delete(0,END)            
-    # self.valor_2_txt.delete(0,END)

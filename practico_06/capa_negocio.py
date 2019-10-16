@@ -46,7 +46,6 @@ class NegocioSocio(object):
         #else return False
 
     def baja(self, id_socio):
-
         return self.datos.baja(id_socio)
 
     def modificacion(self, socio):
