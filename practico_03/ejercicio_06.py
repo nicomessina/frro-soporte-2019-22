@@ -20,7 +20,7 @@ def crear_tabla_peso():
            'FOREIGN KEY(id_persona) REFERENCES persona(id_persona))'
     cursor.execute(cSQL)
     db.commit()
-
+    db.close()
 
 
 def borrar_tabla_peso():
@@ -29,6 +29,7 @@ def borrar_tabla_peso():
     cSQL = 'DROP TABLE IF EXISTS persona_peso'
     cursor.execute(cSQL)
     db.commit()
+    db.close()
 
 
 

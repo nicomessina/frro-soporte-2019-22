@@ -24,7 +24,6 @@ class Persona(Base):
  altura = Column(Integer, nullable=False)
 
 def crear_tabla(engine):
-
  Base.metadata.create_all(engine)
 
 def borrar_tabla(Persona):
@@ -48,6 +47,7 @@ def reset_tabla(func):
         func(session)
         #Luego de finalizar la funcion elimina la tabla
         borrar_tabla(Persona)
+        session.close()
     return func_wrapper
 
 

@@ -13,7 +13,7 @@ import sqlite3
 def crear_tabla():
     db = sqlite3.connect('persona_db.sqlite')
     cursor = db.cursor()
-    cSQL = 'CREATE TABLE IF NOT EXISTS persona(id_persona INTEGER PRIMARY KEY ASC AUTOINCREMENT,' \
+    cSQL = 'CREATE TABLE IF NOT EXISTS persona(id_persona INT ,' \
            'nombre TEXT(30),' \
            'fecha_nacimiento timestamp, ' \
            'dni INT, ' \
@@ -38,7 +38,9 @@ def reset_tabla(func):
         #Corre la funcion con la tabla que creamos
         func()
         #Luego de finalizar la funcion elimina la tabla
-        borrar_tabla()
+        #borrar_tabla()
     return func_wrapper
 
 
+borrar_tabla()
+crear_tabla()

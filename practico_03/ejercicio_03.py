@@ -18,7 +18,6 @@ def borrar_persona(id_persona):
     fila = cursor.fetchone()
     cSQL = 'DELETE FROM persona WHERE id_persona = ?'
     cursor.execute(cSQL, (id_persona,))
-
     db.commit()
     if fila == None:
         return False

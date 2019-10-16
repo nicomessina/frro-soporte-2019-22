@@ -9,7 +9,6 @@ def es_vocal(letra):
     else: return False
 
 
-
 assert (es_vocal('a')) == True;
 assert (es_vocal('e')) == True;
 assert (es_vocal('i')) == True;

@@ -9,7 +9,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, ForeignKey, Integer, String, Date, DateTime
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-
+import random
 Base = declarative_base()
 
 
@@ -24,3 +24,5 @@ class Socio(Base):
     def borrar_tabla(Socio):
      # Crea todas las tablas definidas en los metadatos
      Socio.__table__.drop()
+
+    
