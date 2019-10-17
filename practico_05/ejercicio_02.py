@@ -62,6 +62,7 @@ class DatosSocio(object):
 
     def alta(self, socio):
         soc = Socio()
+        soc.id = socio.id
         soc.dni = socio.dni
         soc.nombre = socio.nombre
         soc.apellido = socio.apellido
@@ -114,6 +115,7 @@ def pruebas():
     socio_3_modificado = datos.buscar(socio_3.id)
     assert socio_3_modificado.id == socio_3.id
     assert socio_3_modificado.nombre == 'Moria'
+    assert socio_3_modificado.apellido == 'Casan'
     assert socio_3_modificado.apellido == 'Casan'
     assert socio_3_modificado.dni == 13264587
     
